@@ -19,7 +19,6 @@ An intelligent n8n workflow that automates lead management by capturing form sub
 * **Automation Tool:** n8n
 * **Trigger:** Form Trigger / Webhook
 * **Database / Storage:** Google Sheets
-* **AI & Processing:** Google Gemini AI Node (`@n8n/n8n-nodes-langchain.googleGemini`)
 * **Notifications:** Telegram Bot API
 * **Communication:** Gmail API
 
