@@ -1,0 +1,1015 @@
+{
+  "name": "LeadGeneration&CRM",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Get in Touch",
+        "formDescription": "Tell us a little about yourself and we'll get back to you.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Full Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Phone Number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Company"
+            },
+            {
+              "fieldLabel": "How did you hear about us?",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Google"
+                  },
+                  {
+                    "option": "Instagram"
+                  },
+                  {
+                    "option": "Facebook"
+                  },
+                  {
+                    "option": "Linkedin"
+                  },
+                  {
+                    "option": "Other"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "How can we help you?",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        96
+      ],
+      "id": "PLACEHOLDER_NODE_ID_1",
+      "name": "On form submission",
+      "webhookId": "PLACEHOLDER_WEBHOOK_ID_1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SPREADSHEET_ID_HERE",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": ""
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Email",
+              "lookupValue": "={{ $json.Email }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        96
+      ],
+      "id": "PLACEHOLDER_NODE_ID_2",
+      "name": "CheckDuplicates",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "PLACEHOLDER_CRED_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SPREADSHEET_ID_HERE",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": ""
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $json.Email }}",
+            "Name": "={{ $('On form submission').item.json['Full Name'] }}",
+            "Phone": "={{ $('On form submission').item.json['Phone Number'] }}",
+            "Company": "={{ $('On form submission').item.json.Company }}",
+            "Source": "={{ $('On form submission').item.json['How did you hear about us?'] }}",
+            "Status": "updated",
+            "updated_at": "={{ $now }}",
+            "Lead_ID": "={{ $json.Lead_ID }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        672,
+        192
+      ],
+      "id": "PLACEHOLDER_NODE_ID_3",
+      "name": "Update row in sheet",
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "PLACEHOLDER_CRED_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "PLACEHOLDER_ASSIGN_ID_1",
+              "name": "Lead_ID",
+              "value": "={{ 'LEAD-' + $now.toMillis() }}",
+              "type": "string"
+            },
+            {
+              "id": "PLACEHOLDER_ASSIGN_ID_2",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        672,
+        0
+      ],
+      "id": "PLACEHOLDER_NODE_ID_4",
+      "name": "SetLeadID"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SPREADSHEET_ID_HERE",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": ""
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Lead_ID": "={{ $json.Lead_ID }}",
+            "Name": "={{ $('On form submission').item.json['Full Name'] }}",
+            "Email": "={{ $('On form submission').item.json.Email }}",
+            "Phone": "={{ $('On form submission').item.json['Phone Number'] }}",
+            "Company": "={{ $('On form submission').item.json.Company }}",
+            "Source": "={{ $('On form submission').item.json['How did you hear about us?'] }}",
+            "Status": "new",
+            "created_at": "={{ $('On form submission').item.json.submittedAt }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        896,
+        0
+      ],
+      "id": "PLACEHOLDER_NODE_ID_5",
+      "name": "Append row in sheet",
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "PLACEHOLDER_CRED_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "models/gemini-3-flash-preview"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a lead classification assistant for a CRM.\n\nAnalyze the provided lead information and classify the lead.\n\nReturn ONLY valid JSON with these fields:\n\n{\n  \"priority\": \"hot | warm | cold\",\n  \"lead_type\": \"potential_customer | existing_customer | partner | job_seeker | other\",\n  \"intent\": \"short description of what the lead appears to want\",\n  \"summary\": \"one concise sentence summarizing the lead\"\n}\n\nDo not invent information that is not present in the lead data.",
+              "role": "model"
+            },
+            {
+              "content": "=Lead information:\n\nName: {{ $('On form submission').item.json['Full Name'] }}\nEmail: {{ $('On form submission').item.json.Email }}\nPhone: {{ $('On form submission').item.json['Phone Number'] }}\nCompany: {{ $('On form submission').item.json.Company }}\nSource: {{ $('On form submission').item.json['How did you hear about us?'] }}\nmessage: {{ $('On form submission').item.json['How can we help you?'] }}\n"
+            }
+          ]
+        },
+        "jsonOutput": "i only want json no other type of output true",
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        1120,
+        0
+      ],
+      "id": "PLACEHOLDER_NODE_ID_6",
+      "name": "Message a model",
+      "retryOnFail": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "PLACEHOLDER_CRED_ID_AI",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "PLACEHOLDER_ASSIGN_ID_3",
+              "name": "priority",
+              "value": "={{ JSON.parse($json.content.parts[0].text).priority }}",
+              "type": "string"
+            },
+            {
+              "id": "PLACEHOLDER_ASSIGN_ID_4",
+              "name": "intent",
+              "value": "={{ JSON.parse($json.content.parts[0].text).intent }}",
+              "type": "string"
+            },
+            {
+              "id": "PLACEHOLDER_ASSIGN_ID_5",
+              "name": "summary",
+              "value": "={{ JSON.parse($json.content.parts[0].text).summary }}",
+              "type": "string"
+            },
+            {
+              "id": "PLACEHOLDER_ASSIGN_ID_6",
+              "name": "lead_type",
+              "value": "={{ JSON.parse($json.content.parts[0].text).lead_type }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1472,
+        0
+      ],
+      "id": "PLACEHOLDER_NODE_ID_7",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SPREADSHEET_ID_HERE",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": ""
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Lead_ID": "={{ $('SetLeadID').item.json.Lead_ID }}",
+            "lead_type": "={{ $json.lead_type }}",
+            "priority": "={{ $json.priority }}",
+            "intent": "={{ $json.intent }}",
+            "AI summary": "={{ $json.summary }}",
+            "message": "={{ $('On form submission').item.json['How can we help you?'] }}"
+          },
+          "matchingColumns": [
+            "Lead_ID"
+          ],
+          "schema": [
+            {
+              "id": "Lead_ID",
+              "displayName": "Lead_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_type",
+              "displayName": "lead_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "intent",
+              "displayName": "intent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI summary",
+              "displayName": "AI summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1696,
+        -96
+      ],
+      "id": "PLACEHOLDER_NODE_ID_8",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "PLACEHOLDER_CRED_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_CHAT_ID_HERE",
+        "text": "=🔥 HOT LEAD ALERT  👤 Name: {{ $('On form submission').item.json['Full Name'] }} 🏢 Company: {{ $('On form submission').item.json.Company }} 📧 Email: {{ $('On form submission').item.json.Email }} 📞 Phone: {{ $('On form submission').item.json['Phone Number'] }}  🎯 Intent: {{ $('Edit Fields').item.json.intent }}  📝 Summary: {{ $('Edit Fields').item.json.summary }}  📍 Source: {{ $('On form submission').item.json['How did you hear about us?'] }} ⭐ Priority: {{ $('Edit Fields').item.json.priority }}  ⚡ Action: Follow up as soon as possible.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1984,
+        0
+      ],
+      "id": "PLACEHOLDER_NODE_ID_9",
+      "name": "Send a text message",
+      "webhookId": "PLACEHOLDER_WEBHOOK_ID_2",
+      "retryOnFail": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "PLACEHOLDER_CRED_ID_TG",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "PLACEHOLDER_COND_ID_1",
+              "leftValue": "={{ $json.priority }}",
+              "rightValue": "hot",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1696,
+        96
+      ],
+      "id": "PLACEHOLDER_NODE_ID_10",
+      "name": "ifLead=hot"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "models/gemini-3-flash-preview"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a professional sales follow-up assistant.\n\nCreate a short, personalized follow-up email based only on the lead information provided.\n\nLead information:\n- Name: {{ $('On form submission').item.json['Full Name'] }}\n- Email: {{ $('On form submission').item.json.Email }}\n- Lead priority: {{ $('Edit Fields').item.json.priority }}\n- Inquiry: {{ $('On form submission').item.json['How can we help you?'] }}\n- Company: {{ $('On form submission').item.json.Company }}\n\nRequirements:\n1. Address the lead by their first name.\n2. Mention their specific inquiry.\n3. Be professional, friendly, and natural.\n4. Keep it around 80–120 words.\n5. Include a low-pressure call to action.\n6. Do not use emojis.\n7. Do not mention AI or automation.\n8. Do not invent information.\n\nReturn ONLY valid JSON:\n\n{\n  \"email_subject\": \"...\",\n  \"email_body\": \"...\"\n}",
+              "role": "model"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        1920,
+        192
+      ],
+      "id": "PLACEHOLDER_NODE_ID_11",
+      "name": "Message a model1",
+      "retryOnFail": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "PLACEHOLDER_CRED_ID_AI",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "={{ $json.content.parts[0].text.parseJson().email_subject }}",
+        "message": "={{ $json.content.parts[0].text.parseJson().email_body }}",
+        "options": {
+          "replyTo": "={{ $('On form submission').item.json.Email }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2272,
+        192
+      ],
+      "id": "PLACEHOLDER_NODE_ID_12",
+      "name": "FollowupDraft",
+      "webhookId": "PLACEHOLDER_WEBHOOK_ID_3",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "PLACEHOLDER_CRED_ID_GMAIL",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "PLACEHOLDER_COND_ID_2",
+              "leftValue": "={{ $json.Email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        448,
+        96
+      ],
+      "id": "PLACEHOLDER_NODE_ID_13",
+      "name": "IfNew"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "CheckDuplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CheckDuplicates": {
+      "main": [
+        [
+          {
+            "node": "IfNew",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SetLeadID": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ifLead=hot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        []
+      ]
+    },
+    "ifLead=hot": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "FollowupDraft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IfNew": {
+      "main": [
+        [
+          {
+            "node": "SetLeadID",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "PLACEHOLDER_VERSION_ID",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "PLACEHOLDER_INSTANCE_ID"
+  },
+  "nodeGroups": [],
+  "id": "PLACEHOLDER_WORKFLOW_ID",
+  "tags": []
+}
